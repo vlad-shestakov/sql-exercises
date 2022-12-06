@@ -1,7 +1,11 @@
-## Упражнения по SQL
+## Задачи по SQL
 - [life-sql/](./life-sql/)   01. Задача Life - Генерация поколений жизни игры "LIFE"
 - [alhemy-sql/](./alhemy-sql/) 02. Задача Алхимия
 - [light-sql/](./light-sql/) 03. Упражнения по SQL
+
+См. также другие проекты по SQL, PL/SQL
+* [PL/SQL проект PLSQL_ENT_EMPLOYEES](https://github.com/vlad-shestakov/ent-employees-plsql)
+
 
 ## 01. Задача Life - Генерация поколений жизни игры "LIFE"
 
