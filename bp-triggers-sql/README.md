@@ -72,8 +72,8 @@
   * дополнительно реализован механизм логирования ошибок и отладки через новую таблицу ERROR_LOG
   * основная бизнес-логика реализована через пакеты PKG_ORDERS, PKG_ORDERS_DETAIL, PKG_LOG
 * Создан тестовый сценарий:
-  * Скрипт создания объектов  - <a href="./_test CREATE_ALL_OBJECTS.sql">_test CREATE_ALL_OBJECTS.sql</a>
-  * Тестовый сецнарий         - <a href="./_test TEST_PROJECT.sql">_test TEST_PROJECT.sql</a>
+  * Скрипт создания всех объектов  - <a href="./_test CREATE_ALL_OBJECTS.sql">_test CREATE_ALL_OBJECTS.sql</a>
+  * Тестовый сценарий              - <a href="./_test TEST_PROJECT.sql">_test TEST_PROJECT.sql</a>
 
 *ДОБАВЛЕНЫ ОБЪЕКТЫ:*
 * Таблица [ERROR_LOG.sql](./ERROR_LOG.sql) - Логирование ошибок и отладки
