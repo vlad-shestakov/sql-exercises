@@ -2,43 +2,43 @@ create or replace package PKG_ORDERS is
 
   -- Author  : V.SHESTAKOV
   -- Created : 12.12.2022
-  -- Purpose : Бизнес-логика работы с заказами
+  -- Purpose : Р‘РёР·РЅРµСЃ-Р»РѕРіРёРєР° СЂР°Р±РѕС‚С‹ СЃ Р·Р°РєР°Р·Р°РјРё
 
   ---------------------------------------------------------------
-  -- Обновляет количество товара в заказе
+  -- РћР±РЅРѕРІР»СЏРµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ
   procedure UPD_AMOUNT(
-    pnORDERS_DET_ID       ORDERS_DETAIL.id%type,        -- Код товара в заказе
-    pnORDERS_DET_ID_ORDER ORDERS_DETAIL.id_order%type,  -- Код заказа
-    pnORDERS_DET_QTY_DIFF ORDERS_DETAIL.qty%type        -- Изменение количества товара в заказе 
+    pnORDERS_DET_ID       ORDERS_DETAIL.id%type,        -- РљРѕРґ С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ
+    pnORDERS_DET_ID_ORDER ORDERS_DETAIL.id_order%type,  -- РљРѕРґ Р·Р°РєР°Р·Р°
+    pnORDERS_DET_QTY_DIFF ORDERS_DETAIL.qty%type        -- РР·РјРµРЅРµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ 
   );
   
   ---------------------------------------------------------------
-  -- Проверяет размер скидки на заказ
+  -- РџСЂРѕРІРµСЂСЏРµС‚ СЂР°Р·РјРµСЂ СЃРєРёРґРєРё РЅР° Р·Р°РєР°Р·
   procedure CHK_DISCOUNT(
-    pnORDERS_ID         ORDERS.ID%type,      -- Код заказа
-    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- Новое значение скидки 
+    pnORDERS_ID         ORDERS.ID%type,      -- РљРѕРґ Р·Р°РєР°Р·Р°
+    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ СЃРєРёРґРєРё 
   );
   
 end PKG_ORDERS;
 /
 create or replace package body PKG_ORDERS is
   
-  csPACKAGE constant varchar2(64) := 'PKG_ORDERS'; -- Имя пакета, для логирования
+  csPACKAGE constant varchar2(64) := 'PKG_ORDERS'; -- РРјСЏ РїР°РєРµС‚Р°, РґР»СЏ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
   
-  -- КОДЫ ОШИБОК
+  -- РљРћР”Р« РћРЁРР‘РћРљ
   
-  --    Код  | Описание
+  --    РљРѕРґ  | РћРїРёСЃР°РЅРёРµ
   -- -------------------------------------------
-  --  -20001 | Значение скидки не может быть пустым
-  --  -20002 | Значение скидки должно быть в интервале 0 - 100
-  --  -20003 | Не найден заказ ORDERS.ID - ###
+  --  -20001 | Р—РЅР°С‡РµРЅРёРµ СЃРєРёРґРєРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј
+  --  -20002 | Р—РЅР°С‡РµРЅРёРµ СЃРєРёРґРєРё РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РІ РёРЅС‚РµСЂРІР°Р»Рµ 0 - 100
+  --  -20003 | РќРµ РЅР°Р№РґРµРЅ Р·Р°РєР°Р· ORDERS.ID - ###
       
   ---------------------------------------------------------------
-  -- Обновляет количество товара в заказе
+  -- РћР±РЅРѕРІР»СЏРµС‚ РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ
   procedure UPD_AMOUNT(
-    pnORDERS_DET_ID       ORDERS_DETAIL.id%type,        -- Код товара в заказе
-    pnORDERS_DET_ID_ORDER ORDERS_DETAIL.id_order%type,  -- Код заказа
-    pnORDERS_DET_QTY_DIFF ORDERS_DETAIL.qty%type        -- Изменение количества товара в заказе 
+    pnORDERS_DET_ID       ORDERS_DETAIL.id%type,        -- РљРѕРґ С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ
+    pnORDERS_DET_ID_ORDER ORDERS_DETAIL.id_order%type,  -- РљРѕРґ Р·Р°РєР°Р·Р°
+    pnORDERS_DET_QTY_DIFF ORDERS_DETAIL.qty%type        -- РР·РјРµРЅРµРЅРёРµ РєРѕР»РёС‡РµСЃС‚РІР° С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ 
   )
   is
     nCNT number;
@@ -47,14 +47,14 @@ create or replace package body PKG_ORDERS is
        set o.AMOUNT = coalesce(o.AMOUNT, 0) + coalesce(pnORDERS_DET_QTY_DIFF, 0)
      where o.id = pnORDERS_DET_ID_ORDER;
     
-    nCNT := sql%rowcount; -- Сколько обновилось записей
+    nCNT := sql%rowcount; -- РЎРєРѕР»СЊРєРѕ РѕР±РЅРѕРІРёР»РѕСЃСЊ Р·Р°РїРёСЃРµР№
     
     PKG_LOG.DEBUG(psOBJ_ID   => substr(to_char(pnORDERS_DET_ID_ORDER) || ' - ' || to_char(pnORDERS_DET_QTY_DIFF) , 1, 4000),
                   psOBJ_TYPE => 'pnORDERS_DET_ID_ORDER - pnORDERS_DET_QTY_DIFF',
                   psPROC     => csPACKAGE || '.UPD_AMOUNT');
             
     if nCNT = 0 then 
-      raise_application_error(-20003, 'Не найден заказ ORDERS.ID - ' || to_char(pnORDERS_DET_ID_ORDER)); 
+      raise_application_error(-20003, 'РќРµ РЅР°Р№РґРµРЅ Р·Р°РєР°Р· ORDERS.ID - ' || to_char(pnORDERS_DET_ID_ORDER)); 
     end if;
   exception
     when others then
@@ -66,10 +66,10 @@ create or replace package body PKG_ORDERS is
   end UPD_AMOUNT;
   
   ---------------------------------------------------------------
-  -- Проверяет размер скидки на заказ
+  -- РџСЂРѕРІРµСЂСЏРµС‚ СЂР°Р·РјРµСЂ СЃРєРёРґРєРё РЅР° Р·Р°РєР°Р·
   procedure CHK_DISCOUNT(
-    pnORDERS_ID         ORDERS.ID%type,      -- Код заказа
-    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- Новое значение скидки 
+    pnORDERS_ID         ORDERS.ID%type,      -- РљРѕРґ Р·Р°РєР°Р·Р°
+    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- РќРѕРІРѕРµ Р·РЅР°С‡РµРЅРёРµ СЃРєРёРґРєРё 
   )
   is
   begin
@@ -78,10 +78,10 @@ create or replace package body PKG_ORDERS is
                   psPROC     => csPACKAGE || '.CHK_DISCOUNT');
             
     if pnORDERS_DISCOUNT is null then
-      raise_application_error(-20001, 'Значение скидки не может быть пустым'); 
+      raise_application_error(-20001, 'Р—РЅР°С‡РµРЅРёРµ СЃРєРёРґРєРё РЅРµ РјРѕР¶РµС‚ Р±С‹С‚СЊ РїСѓСЃС‚С‹Рј'); 
     end if;
     if not pnORDERS_DISCOUNT between 0 and 100 then
-      raise_application_error(-20002, 'Значение скидки должно быть в интервале 0 - 100'); 
+      raise_application_error(-20002, 'Р—РЅР°С‡РµРЅРёРµ СЃРєРёРґРєРё РґРѕР»Р¶РЅРѕ Р±С‹С‚СЊ РІ РёРЅС‚РµСЂРІР°Р»Рµ 0 - 100'); 
     end if;
   exception
     when others then

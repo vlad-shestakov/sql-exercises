@@ -2,22 +2,22 @@ create or replace package PKG_ORDERS_DETAIL is
 
   -- Author  : V.SHESTAKOV
   -- Created : 12.12.2022 12:58:04
-  -- Purpose : Áèçíåñ-ëîãèêà ðàáîòû ñ òîâàðàìè â çàêàçå
+  -- Purpose : Ð‘Ð¸Ð·Ð½ÐµÑ-Ð»Ð¾Ð³Ð¸ÐºÐ° Ñ€Ð°Ð±Ð¾Ñ‚Ñ‹ Ñ Ñ‚Ð¾Ð²Ð°Ñ€Ð°Ð¼Ð¸ Ð² Ð·Ð°ÐºÐ°Ð·Ðµ
 
   ---------------------------------------------------------------
-  -- Âîçâðàùàåò ñòîèìîñòü òîâàðà ñ ó÷åòîì ñêèäêè çàêàçà
+  -- Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ Ñ‚Ð¾Ð²Ð°Ñ€Ð° Ñ ÑƒÑ‡ÐµÑ‚Ð¾Ð¼ ÑÐºÐ¸Ð´ÐºÐ¸ Ð·Ð°ÐºÐ°Ð·Ð°
   function GET_SUM(
-    pnID_ORDER       ORDERS_DETAIL.id_order%type,  -- Êîä çàêàçà
-    pnQTY            ORDERS_DETAIL.qty%type,       -- Êîëè÷åñòâî åä
-    pnPRICE          ORDERS_DETAIL.price%type,     -- Öåíà çà åäèíèöó
-    pnDISCOUNT       ORDERS.DISCOUNT%type := null  -- Ñêèäêà çàêàçà, åñëè íå óêàçàí - âûñ÷èòûâàåòñÿ
+    pnID_ORDER       ORDERS_DETAIL.id_order%type,  -- ÐšÐ¾Ð´ Ð·Ð°ÐºÐ°Ð·Ð°
+    pnQTY            ORDERS_DETAIL.qty%type,       -- ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ ÐµÐ´
+    pnPRICE          ORDERS_DETAIL.price%type,     -- Ð¦ÐµÐ½Ð° Ð·Ð° ÐµÐ´Ð¸Ð½Ð¸Ñ†Ñƒ
+    pnDISCOUNT       ORDERS.DISCOUNT%type := null  -- Ð¡ÐºÐ¸Ð´ÐºÐ° Ð·Ð°ÐºÐ°Ð·Ð°, ÐµÑÐ»Ð¸ Ð½Ðµ ÑƒÐºÐ°Ð·Ð°Ð½ - Ð²Ñ‹ÑÑ‡Ð¸Ñ‚Ñ‹Ð²Ð°ÐµÑ‚ÑÑ
   ) return number;
 
   ---------------------------------------------------------------
-  -- Îáíîâëÿåò öåíû òîâàðîâ â çàêàçå íà îñíîâå ñêèäêè
+  -- ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÑ‚ Ñ†ÐµÐ½Ñ‹ Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð² Ð² Ð·Ð°ÐºÐ°Ð·Ðµ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ ÑÐºÐ¸Ð´ÐºÐ¸
   procedure UPD_ORD_SUM_BY_DISCOUNT(
-    pnORDERS_ID         ORDERS.ID%type,      -- Êîä çàêàçà
-    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- Íîâîå çíà÷åíèå ñêèäêè 
+    pnORDERS_ID         ORDERS.ID%type,      -- ÐšÐ¾Ð´ Ð·Ð°ÐºÐ°Ð·Ð°
+    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- ÐÐ¾Ð²Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ ÑÐºÐ¸Ð´ÐºÐ¸ 
   );
   
 end PKG_ORDERS_DETAIL;
@@ -27,18 +27,18 @@ create or replace package body PKG_ORDERS_DETAIL is
   csPACKAGE constant varchar2(64) := 'PKG_ORDERS_DETAIL';
   
   ---------------------------------------------------------------
-  -- Âîçâðàùàåò ñòîèìîñòü òîâàðà ñ ó÷åòîì ñêèäêè çàêàçà
+  -- Ð’Ð¾Ð·Ð²Ñ€Ð°Ñ‰Ð°ÐµÑ‚ ÑÑ‚Ð¾Ð¸Ð¼Ð¾ÑÑ‚ÑŒ Ñ‚Ð¾Ð²Ð°Ñ€Ð° Ñ ÑƒÑ‡ÐµÑ‚Ð¾Ð¼ ÑÐºÐ¸Ð´ÐºÐ¸ Ð·Ð°ÐºÐ°Ð·Ð°
   function GET_SUM(
-    pnID_ORDER       ORDERS_DETAIL.id_order%type,  -- Êîä çàêàçà
-    pnQTY            ORDERS_DETAIL.qty%type,       -- Êîëè÷åñòâî åä
-    pnPRICE          ORDERS_DETAIL.price%type,     -- Öåíà çà åäèíèöó
-    pnDISCOUNT       ORDERS.DISCOUNT%type := null  -- Ñêèäêà çàêàçà, åñëè íå óêàçàí - âûñ÷èòûâàåòñÿ
+    pnID_ORDER       ORDERS_DETAIL.id_order%type,  -- ÐšÐ¾Ð´ Ð·Ð°ÐºÐ°Ð·Ð°
+    pnQTY            ORDERS_DETAIL.qty%type,       -- ÐšÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾ ÐµÐ´
+    pnPRICE          ORDERS_DETAIL.price%type,     -- Ð¦ÐµÐ½Ð° Ð·Ð° ÐµÐ´Ð¸Ð½Ð¸Ñ†Ñƒ
+    pnDISCOUNT       ORDERS.DISCOUNT%type := null  -- Ð¡ÐºÐ¸Ð´ÐºÐ° Ð·Ð°ÐºÐ°Ð·Ð°, ÐµÑÐ»Ð¸ Ð½Ðµ ÑƒÐºÐ°Ð·Ð°Ð½ - Ð²Ñ‹ÑÑ‡Ð¸Ñ‚Ñ‹Ð²Ð°ÐµÑ‚ÑÑ
   ) return number
   is 
     nRES       number;
     nDISCOUNT  ORDERS.DISCOUNT%type := pnDISCOUNT;
   begin
-    -- Ñêèäêà çàêàçà
+    -- Ð¡ÐºÐ¸Ð´ÐºÐ° Ð·Ð°ÐºÐ°Ð·Ð°
     if nDISCOUNT is null then
       select min(o.DISCOUNT) as ord_discount
         into nDISCOUNT
@@ -46,7 +46,7 @@ create or replace package body PKG_ORDERS_DETAIL is
        where o.ID = pnID_ORDER;
     end if;
      
-    -- öåíà(orders_detail.price) * êîëè÷åñòâî(orders_detail.qty) * (1-ñêèäêà(orders.descount)/100)
+    -- Ñ†ÐµÐ½Ð°(orders_detail.price) * ÐºÐ¾Ð»Ð¸Ñ‡ÐµÑÑ‚Ð²Ð¾(orders_detail.qty) * (1-ÑÐºÐ¸Ð´ÐºÐ°(orders.descount)/100)
     nRES := coalesce(coalesce(pnPRICE, 0) * coalesce(pnQTY, 0) * (1 - coalesce(nDISCOUNT, 0) / 100), 0);
     
     
@@ -74,15 +74,15 @@ create or replace package body PKG_ORDERS_DETAIL is
   end GET_SUM;
   
   ---------------------------------------------------------------
-  -- Îáíîâëÿåò öåíû òîâàðîâ â çàêàçå íà îñíîâå ñêèäêè
+  -- ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÑ‚ Ñ†ÐµÐ½Ñ‹ Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð² Ð² Ð·Ð°ÐºÐ°Ð·Ðµ Ð½Ð° Ð¾ÑÐ½Ð¾Ð²Ðµ ÑÐºÐ¸Ð´ÐºÐ¸
   procedure UPD_ORD_SUM_BY_DISCOUNT(
-    pnORDERS_ID         ORDERS.ID%type,      -- Êîä çàêàçà
-    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- Íîâîå çíà÷åíèå ñêèäêè 
+    pnORDERS_ID         ORDERS.ID%type,      -- ÐšÐ¾Ð´ Ð·Ð°ÐºÐ°Ð·Ð°
+    pnORDERS_DISCOUNT   ORDERS.DISCOUNT%type -- ÐÐ¾Ð²Ð¾Ðµ Ð·Ð½Ð°Ñ‡ÐµÐ½Ð¸Ðµ ÑÐºÐ¸Ð´ÐºÐ¸ 
   )
   is
     nCNT number;
   begin
-    -- Îáíîâëÿåì ñêèäêó íà çàêàç ó âñåõ òîâàðîâ
+    -- ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ ÑÐºÐ¸Ð´ÐºÑƒ Ð½Ð° Ð·Ð°ÐºÐ°Ð· Ñƒ Ð²ÑÐµÑ… Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð²
     update ORDERS_DETAIL od
        set od.str_sum = PKG_ORDERS_DETAIL.GET_SUM(pnID_ORDER => od.ID_ORDER,
                                                   pnQTY      => od.QTY,

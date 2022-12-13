@@ -1,7 +1,7 @@
 create or replace trigger TR_ERROR_LOG_B_I
   before INSERT on ERROR_LOG
   for each row
-  -- Триггер инициализирует ID
+  -- РўСЂРёРіРіРµСЂ РёРЅРёС†РёР°Р»РёР·РёСЂСѓРµС‚ ID
 declare
 begin
   if :new.ID is null then

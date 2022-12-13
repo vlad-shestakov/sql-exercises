@@ -2,58 +2,58 @@ create or replace package PKG_LOG is
 
   -- Author  : V.SHESTAKOV
   -- Created : 12.12.2022 22:59:54
-  -- Purpose : Работа с таблицей логов ERROR_LOG
+  -- Purpose : Р Р°Р±РѕС‚Р° СЃ С‚Р°Р±Р»РёС†РµР№ Р»РѕРіРѕРІ ERROR_LOG
   
-  -- Уровень логирования ошибок БД по-умолчанию - ERROR / WARNING / DEBUG / TRACE
+  -- РЈСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ РѕС€РёР±РѕРє Р‘Р” РїРѕ-СѓРјРѕР»С‡Р°РЅРёСЋ - ERROR / WARNING / DEBUG / TRACE
   csERR_LEVEL constant varchar2(255) := 'ERROR'; 
   
 --------------------------------------------------------------- 
 /*
-  -- ПРИМЕРЫ ИСПОЛЬЗОВАНИЯ:
+  -- РџР РРњР•Р Р« РРЎРџРћР›Р¬Р—РћР’РђРќРРЇ:
   
-  -- Сменить уровень логирования в БД для сессии
+  -- РЎРјРµРЅРёС‚СЊ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ РІ Р‘Р” РґР»СЏ СЃРµСЃСЃРёРё
   PKG_LOG.SET_ERR_LEVEL(psERR_LEVEL => 'TRACE');  
-  -- или
+  -- РёР»Рё
   PKG_LOG.SET_ERR_LEVEL(psERR_LEVEL => PKG_LOG.csERR_LEVEL); 
   
   
-  -- Пример логирования отладки
+  -- РџСЂРёРјРµСЂ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ РѕС‚Р»Р°РґРєРё
   PKG_LOG.DEBUG(psOBJ_ID   => substr(to_char(pnORDERS_DET_ID_ORDER) || ' - ' || to_char(pnORDERS_DET_QTY_DIFF) , 1, 4000),
                 psOBJ_TYPE => 'pnORDERS_DET_ID_ORDER - pnORDERS_DET_QTY_DIFF',
                 psPROC     => 'PKG_ORDERS.UPD_AMOUNT');
                 
-  -- Пример логирования ошибок
+  -- РџСЂРёРјРµСЂ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ РѕС€РёР±РѕРє
   PKG_LOG.ERROR(psERR_MSG  => sqlerrm, psERR_CODE => sqlcode, 
                 psOBJ_ID   => substr(to_char(pnORDERS_DET_ID_ORDER) || ' - ' || to_char(pnORDERS_DET_QTY_DIFF) , 1, 4000),
                 psOBJ_TYPE => 'pnORDERS_DET_ID_ORDER - pnORDERS_DET_QTY_DIFF',
                 psPROC     => 'PKG_ORDERS.UPD_AMOUNT');
                 
                 
-  -- Удаление логов
+  -- РЈРґР°Р»РµРЅРёРµ Р»РѕРіРѕРІ
   PKG_LOG.DEL_LOGS;
   commit;
   
 /**/
 
 --------------------------------------------------------------- 
--- Возвращает уровень логирования числом
+-- Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ С‡РёСЃР»РѕРј
 function GET_ERR_LEVEL_NUM(
   psERR_LEVEL  varchar2
 ) return number;
 
 ------------------------------------------------------ 
--- Возвращает текущий уровень логирования
+-- Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РёР№ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
 function GET_ERR_LEVEL 
 return varchar2;
 
 ------------------------------------------------------ 
--- Устанавливает текущий уровень логирования
+-- РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С‚РµРєСѓС‰РёР№ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
 procedure SET_ERR_LEVEL(
   psERR_LEVEL  varchar2
 );
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме ошибки (ERROR)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ РѕС€РёР±РєРё (ERROR)
 procedure ERROR(
   psERR_MSG    varchar2,
   psERR_CODE   varchar2,
@@ -63,7 +63,7 @@ procedure ERROR(
 );
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме предупреждения (WARNING)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёСЏ (WARNING)
 procedure WARNING(
   psOBJ_ID     varchar2,
   psOBJ_TYPE   varchar2,
@@ -71,7 +71,7 @@ procedure WARNING(
 );
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме отладки (DEBUG)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ РѕС‚Р»Р°РґРєРё (DEBUG)
 procedure DEBUG(
   psOBJ_ID     varchar2,
   psOBJ_TYPE   varchar2,
@@ -79,7 +79,7 @@ procedure DEBUG(
 );
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме трассировки (TRACE)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ С‚СЂР°СЃСЃРёСЂРѕРІРєРё (TRACE)
 procedure TRACE(
   psOBJ_ID     varchar2,
   psOBJ_TYPE   varchar2,
@@ -87,17 +87,17 @@ procedure TRACE(
 );
 
 ------------------------------------------------------ 
--- Удаляет логи
+-- РЈРґР°Р»СЏРµС‚ Р»РѕРіРё
 procedure DEL_LOGS;
 
 end PKG_LOG;
 /
 create or replace package body PKG_LOG is
 
-  sERR_LEVEL varchar2(255); -- Текущий уровень логирования
+  sERR_LEVEL varchar2(255); -- РўРµРєСѓС‰РёР№ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
   
 --------------------------------------------------------------- 
--- Возвращает уровень логирования числом
+-- Р’РѕР·РІСЂР°С‰Р°РµС‚ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ С‡РёСЃР»РѕРј
 function GET_ERR_LEVEL_NUM(
   psERR_LEVEL  varchar2
 ) return number
@@ -113,7 +113,7 @@ begin
 end GET_ERR_LEVEL_NUM;
 
 ------------------------------------------------------ 
--- Возвращает текущий уровень логирования
+-- Р’РѕР·РІСЂР°С‰Р°РµС‚ С‚РµРєСѓС‰РёР№ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
 function GET_ERR_LEVEL
 return varchar2
 is 
@@ -122,7 +122,7 @@ begin
 end GET_ERR_LEVEL; 
 
 ------------------------------------------------------ 
--- Устанавливает текущий уровень логирования
+-- РЈСЃС‚Р°РЅР°РІР»РёРІР°РµС‚ С‚РµРєСѓС‰РёР№ СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
 procedure SET_ERR_LEVEL(
   psERR_LEVEL  varchar2
 )
@@ -132,20 +132,20 @@ begin
 end SET_ERR_LEVEL; 
  
 ---------------------------------------------------------------
--- Выводит данные в лог ERROR_LOG
---   Автономная транзакция
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG
+--   РђРІС‚РѕРЅРѕРјРЅР°СЏ С‚СЂР°РЅР·Р°РєС†РёСЏ
 procedure LOG_ERR(
   psERR_MSG    varchar2,
   psERR_CODE   varchar2,
   psOBJ_ID     varchar2,
   psOBJ_TYPE   varchar2,
   psPROC       varchar2,
-  psERR_LEVEL  varchar2 -- Тип лога 'ERROR','WARNING','DEBUG','TRACE'
+  psERR_LEVEL  varchar2 -- РўРёРї Р»РѕРіР° 'ERROR','WARNING','DEBUG','TRACE'
 ) 
 is
   pragma AUTONOMOUS_TRANSACTION;
 begin
-  -- Если уровень логирования вызова больше больше уровня логирования БД - не логируем
+  -- Р•СЃР»Рё СѓСЂРѕРІРµРЅСЊ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ РІС‹Р·РѕРІР° Р±РѕР»СЊС€Рµ Р±РѕР»СЊС€Рµ СѓСЂРѕРІРЅСЏ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ Р‘Р” - РЅРµ Р»РѕРіРёСЂСѓРµРј
   if GET_ERR_LEVEL_NUM(psERR_LEVEL) > GET_ERR_LEVEL_NUM(sERR_LEVEL) then
     return;
   end if;
@@ -163,7 +163,7 @@ exception
 end LOG_ERR;
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме ошибки (ERROR)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ РѕС€РёР±РєРё (ERROR)
 procedure ERROR(
   psERR_MSG    varchar2,
   psERR_CODE   varchar2,
@@ -182,7 +182,7 @@ begin
 end ERROR;
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме предупреждения (WARNING)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ РїСЂРµРґСѓРїСЂРµР¶РґРµРЅРёСЏ (WARNING)
 procedure WARNING(
   psOBJ_ID     varchar2,
   psOBJ_TYPE   varchar2,
@@ -199,7 +199,7 @@ begin
 end WARNING;
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме отладки (DEBUG)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ РѕС‚Р»Р°РґРєРё (DEBUG)
 procedure DEBUG(
   psOBJ_ID     varchar2,
   psOBJ_TYPE   varchar2,
@@ -216,7 +216,7 @@ begin
 end DEBUG;
 
 --------------------------------------------------------------- 
--- Выводит данные в лог ERROR_LOG в режиме трассировки (TRACE)
+-- Р’С‹РІРѕРґРёС‚ РґР°РЅРЅС‹Рµ РІ Р»РѕРі ERROR_LOG РІ СЂРµР¶РёРјРµ С‚СЂР°СЃСЃРёСЂРѕРІРєРё (TRACE)
 procedure TRACE(
   psOBJ_ID     varchar2,
   psOBJ_TYPE   varchar2,
@@ -233,7 +233,7 @@ begin
 end TRACE;
 
 ------------------------------------------------------ 
--- Удаляет логи
+-- РЈРґР°Р»СЏРµС‚ Р»РѕРіРё
 procedure DEL_LOGS
 is 
 begin
@@ -242,9 +242,9 @@ end DEL_LOGS;
 
 --------------------------------------------------------------- 
 begin 
-  -- ИНИЦИАЛИЗАЦИЯ ПАКЕТА
+  -- РРќРР¦РРђР›РР—РђР¦РРЇ РџРђРљР•РўРђ
   
-  -- Инициализация текущего уровня логирования
+  -- РРЅРёС†РёР°Р»РёР·Р°С†РёСЏ С‚РµРєСѓС‰РµРіРѕ СѓСЂРѕРІРЅСЏ Р»РѕРіРёСЂРѕРІР°РЅРёСЏ
   SET_ERR_LEVEL(csERR_LEVEL);
 end PKG_LOG;
 /

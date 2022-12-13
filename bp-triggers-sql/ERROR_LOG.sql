@@ -24,7 +24,7 @@ tablespace USERS
 nologging;
 -- Add comments to the table 
 comment on table ERROR_LOG
-  is 'Логирование ошибок.';
+  is 'Р›РѕРіРёСЂРѕРІР°РЅРёРµ РѕС€РёР±РѕРє.';
 -- Create/Recreate primary, unique and foreign key constraints 
 alter table ERROR_LOG
   add constraint PK_ERROR_LOG primary key (ID)

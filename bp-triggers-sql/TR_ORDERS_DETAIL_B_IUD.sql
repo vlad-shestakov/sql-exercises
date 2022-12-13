@@ -2,15 +2,15 @@ create or replace trigger TR_ORDERS_DETAIL_B_IUD
   before INSERT or UPDATE or DELETE on ORDERS_DETAIL
   for each row
     
-  -- Триггер обновляет поля ORDERS_DETAIL
-  --   STR_SUM - Считается сумма товара с учетом скидки заказа
-  -- Обновляет поля ORDERS
-  --   AMOUNT - Количество товаров в заказе
-  -- Логирует отладку и ошибки в ERROR_LOG
+  -- РўСЂРёРіРіРµСЂ РѕР±РЅРѕРІР»СЏРµС‚ РїРѕР»СЏ ORDERS_DETAIL
+  --   STR_SUM - РЎС‡РёС‚Р°РµС‚СЃСЏ СЃСѓРјРјР° С‚РѕРІР°СЂР° СЃ СѓС‡РµС‚РѕРј СЃРєРёРґРєРё Р·Р°РєР°Р·Р°
+  -- РћР±РЅРѕРІР»СЏРµС‚ РїРѕР»СЏ ORDERS
+  --   AMOUNT - РљРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂРѕРІ РІ Р·Р°РєР°Р·Рµ
+  -- Р›РѕРіРёСЂСѓРµС‚ РѕС‚Р»Р°РґРєСѓ Рё РѕС€РёР±РєРё РІ ERROR_LOG
   
 declare
-  nQTY_DIFF   ORDERS_DETAIL.QTY%type;     -- Разница в количестве
-  nSTR_SUM    ORDERS_DETAIL.STR_SUM%type; -- Новая цена
+  nQTY_DIFF   ORDERS_DETAIL.QTY%type;     -- Р Р°Р·РЅРёС†Р° РІ РєРѕР»РёС‡РµСЃС‚РІРµ
+  nSTR_SUM    ORDERS_DETAIL.STR_SUM%type; -- РќРѕРІР°СЏ С†РµРЅР°
   sOPERATION  varchar2(255);
 begin
   sOPERATION := case when INSERTING then 'INS'
@@ -23,18 +23,18 @@ begin
     nQTY_DIFF := coalesce(:new.QTY, 0) - coalesce(:old.QTY, 0);
     :new.QTY := coalesce(:new.QTY, 0);
 
-    -- Если количество изменилось
+    -- Р•СЃР»Рё РєРѕР»РёС‡РµСЃС‚РІРѕ РёР·РјРµРЅРёР»РѕСЃСЊ
     if coalesce(:old.QTY, 0) <> coalesce(:new.QTY, 0) then
-      -- Обновляем количество товара в заказе
+      -- РћР±РЅРѕРІР»СЏРµРј РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ
       PKG_ORDERS.UPD_AMOUNT(pnORDERS_DET_ID       => :new.ID,
                             pnORDERS_DET_ID_ORDER => :new.ID_ORDER,
                             pnORDERS_DET_QTY_DIFF => nQTY_DIFF);
     end if;
 
-    -- Если количество или цена товара изменились
+    -- Р•СЃР»Рё РєРѕР»РёС‡РµСЃС‚РІРѕ РёР»Рё С†РµРЅР° С‚РѕРІР°СЂР° РёР·РјРµРЅРёР»РёСЃСЊ
     if coalesce(:old.QTY, 0) <> coalesce(:new.QTY, 0)
         or coalesce(:old.PRICE, 0) <> coalesce(:new.PRICE, 0) then
-      -- Обновляем сумму товара
+      -- РћР±РЅРѕРІР»СЏРµРј СЃСѓРјРјСѓ С‚РѕРІР°СЂР°
       nSTR_SUM := PKG_ORDERS_DETAIL.GET_SUM(pnID_ORDER => :new.ID_ORDER,
                                             pnQTY      => :new.QTY,
                                             pnPRICE    => :new.PRICE);
@@ -44,13 +44,13 @@ begin
   elsif DELETING then
 
     nQTY_DIFF := -1 * coalesce(:old.QTY, 0);
-    -- Обновляем количество товара в заказе
+    -- РћР±РЅРѕРІР»СЏРµРј РєРѕР»РёС‡РµСЃС‚РІРѕ С‚РѕРІР°СЂР° РІ Р·Р°РєР°Р·Рµ
     PKG_ORDERS.UPD_AMOUNT(pnORDERS_DET_ID       => :old.ID,
                           pnORDERS_DET_ID_ORDER => :old.ID_ORDER,
                           pnORDERS_DET_QTY_DIFF => nQTY_DIFF);
   end if; -- DELETING
 
-  -- Отладка
+  -- РћС‚Р»Р°РґРєР°
   PKG_LOG.DEBUG(psOBJ_ID   => substr(sOPERATION || ': ' || to_char(:new.ID)
                               || ' prc-' || to_char(:new.PRICE)
                               || ' q-'   || to_char(:new.QTY)

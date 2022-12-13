@@ -1,17 +1,17 @@
 create or replace trigger TR_ORDERS_DETAIL_BA_IU_IDX
   for INSERT or DELETE on ORDERS_DETAIL
   compound trigger
-  -- Òðèããåð îáíîâëÿåò ïîëå ORDERS_DETAIL.IDX
-  -- Äëÿ îïåðàöèé ÂÑÒÀÂÊÈ è ÓÄÀËÅÍÈß
-  -- âñå ñòðîêè òîâàðîâ ïîëó÷àþò íîâûé èíäåêñ IDX=1,2,3... ñ ñîðòèðîâêîé ID_ORDER, ID
-  -- Îïåðàöèÿ ÎÁÍÎÂËÅÍÈß äàííûõ ñòðîêè èãíîðèðóåòñÿ òðèããåðîì
+  -- Ð¢Ñ€Ð¸Ð³Ð³ÐµÑ€ Ð¾Ð±Ð½Ð¾Ð²Ð»ÑÐµÑ‚ Ð¿Ð¾Ð»Ðµ ORDERS_DETAIL.IDX
+  -- Ð”Ð»Ñ Ð¾Ð¿ÐµÑ€Ð°Ñ†Ð¸Ð¹ Ð’Ð¡Ð¢ÐÐ’ÐšÐ˜ Ð¸ Ð£Ð”ÐÐ›Ð•ÐÐ˜Ð¯
+  -- Ð²ÑÐµ ÑÑ‚Ñ€Ð¾ÐºÐ¸ Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð² Ð¿Ð¾Ð»ÑƒÑ‡Ð°ÑŽÑ‚ Ð½Ð¾Ð²Ñ‹Ð¹ Ð¸Ð½Ð´ÐµÐºÑ IDX=1,2,3... Ñ ÑÐ¾Ñ€Ñ‚Ð¸Ñ€Ð¾Ð²ÐºÐ¾Ð¹ ID_ORDER, ID
+  -- ÐžÐ¿ÐµÑ€Ð°Ñ†Ð¸Ñ ÐžÐ‘ÐÐžÐ’Ð›Ð•ÐÐ˜Ð¯ Ð´Ð°Ð½Ð½Ñ‹Ñ… ÑÑ‚Ñ€Ð¾ÐºÐ¸ Ð¸Ð³Ð½Ð¾Ñ€Ð¸Ñ€ÑƒÐµÑ‚ÑÑ Ñ‚Ñ€Ð¸Ð³Ð³ÐµÑ€Ð¾Ð¼
   
-  -- ÏÐÎÒÅÑÒÈÐÎÂÀÒÜ:
-  --   Ïîâåäåíèå ïðè êàñêàäíîì óäàëåíèè çàïèñåé òîâàðîâ,
-  --   åñëè áóäåò íàñòðîåí êàñêàäíûé ôîðåéæí êëþ÷ íà òàáëèöó ORDERS
+  -- ÐŸÐ ÐžÐ¢Ð•Ð¡Ð¢Ð˜Ð ÐžÐ’ÐÐ¢Ð¬:
+  --   ÐŸÐ¾Ð²ÐµÐ´ÐµÐ½Ð¸Ðµ Ð¿Ñ€Ð¸ ÐºÐ°ÑÐºÐ°Ð´Ð½Ð¾Ð¼ ÑƒÐ´Ð°Ð»ÐµÐ½Ð¸Ð¸ Ð·Ð°Ð¿Ð¸ÑÐµÐ¹ Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð²,
+  --   ÐµÑÐ»Ð¸ Ð±ÑƒÐ´ÐµÑ‚ Ð½Ð°ÑÑ‚Ñ€Ð¾ÐµÐ½ ÐºÐ°ÑÐºÐ°Ð´Ð½Ñ‹Ð¹ Ñ„Ð¾Ñ€ÐµÐ¹Ð¶Ð½ ÐºÐ»ÑŽÑ‡ Ð½Ð° Ñ‚Ð°Ð±Ð»Ð¸Ñ†Ñƒ ORDERS
   -- 
-  --   Ïðè÷èíà:
-  --     "èñïîëüçîâàíèå ñîñòàâíûõ òðèããåðîâ ñâÿçàíî ñ äîêóìåíòèðîâàííûì áàãîì ÑÓÁÄ"
+  --   ÐŸÑ€Ð¸Ñ‡Ð¸Ð½Ð°:
+  --     "Ð¸ÑÐ¿Ð¾Ð»ÑŒÐ·Ð¾Ð²Ð°Ð½Ð¸Ðµ ÑÐ¾ÑÑ‚Ð°Ð²Ð½Ñ‹Ñ… Ñ‚Ñ€Ð¸Ð³Ð³ÐµÑ€Ð¾Ð² ÑÐ²ÑÐ·Ð°Ð½Ð¾ Ñ Ð´Ð¾ÐºÑƒÐ¼ÐµÐ½Ñ‚Ð¸Ñ€Ð¾Ð²Ð°Ð½Ð½Ñ‹Ð¼ Ð±Ð°Ð³Ð¾Ð¼ Ð¡Ð£Ð‘Ð”"
   --     https://community.oracle.com/tech/developers/discussion/3823651/compound-trigger-and-global-variable
   --     https://habr.com/ru/post/306280/
   
@@ -33,7 +33,7 @@ create or replace trigger TR_ORDERS_DETAIL_BA_IU_IDX
       nID       := :old.ID;
     end if;
     
-    -- Îòëàäêà
+    -- ÐžÑ‚Ð»Ð°Ð´ÐºÐ°
     PKG_LOG.DEBUG(psOBJ_ID   => substr('  BEFORE EACH ' || sOPERATION || ': ' 
                              || to_char(nID) || ' - ' 
                              || to_char(nID_ORDER) , 1, 4000),
@@ -56,14 +56,14 @@ create or replace trigger TR_ORDERS_DETAIL_BA_IU_IDX
     nCNT number := 0;
   begin
     if sOPERATION in ('INS', 'DEL') and nID_ORDER is not null  then 
-      -- Îáíîâëÿåì èíäåêñû ó ñòðîê çàêàçà
+      -- ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÐ¼ Ð¸Ð½Ð´ÐµÐºÑÑ‹ Ñƒ ÑÑ‚Ñ€Ð¾Ðº Ð·Ð°ÐºÐ°Ð·Ð°
       merge into ORDERS_DETAIL t
-      using (-- Âûáåðåì âñå ñòðîêè çàêàçà
+      using (-- Ð’Ñ‹Ð±ÐµÑ€ÐµÐ¼ Ð²ÑÐµ ÑÑ‚Ñ€Ð¾ÐºÐ¸ Ð·Ð°ÐºÐ°Ð·Ð°
              select od.ID,
                     -- od.ID_ORDER,
                     od.IDX,
                     ROW_NUMBER() over (partition by od.id_order order by id_order, id) 
-                      as CALC_IDX -- Íîâûé íîìåð ñòðîêè
+                      as CALC_IDX -- ÐÐ¾Ð²Ñ‹Ð¹ Ð½Ð¾Ð¼ÐµÑ€ ÑÑ‚Ñ€Ð¾ÐºÐ¸
                from ORDERS_DETAIL od
               where od.ID_ORDER = nID_ORDER
             ) rec
@@ -75,7 +75,7 @@ create or replace trigger TR_ORDERS_DETAIL_BA_IU_IDX
       nCNT := sql%rowcount;
     end if;
     
-    -- Îòëàäêà
+    -- ÐžÑ‚Ð»Ð°Ð´ÐºÐ°
     PKG_LOG.DEBUG(psOBJ_ID   => substr('AFTER ' || sOPERATION || ': '
                              || to_char(nID_ORDER)  || ' cnt='
                              || to_char(nCNT) , 1, 4000),

@@ -2,13 +2,13 @@ create or replace trigger TR_ORDERS_B_IU
   before INSERT or UPDATE on ORDERS
   for each row
     
-  -- Òðèããåð îáíîâëÿåò ïîëÿ ORDERS
-  -- * Èíèöèàëèçèðóåò DATE_DOC, AMOUNT
-  -- * Ïðè îáíîâëåíèè DISCOUNT
-  --   - Ïðîâåðÿåò DISCOUNT íà âàëèäíîñòü (PKG_ORDERS.CHK_DISCOUNT)
-  --   - Îáíîâëÿåò öåíû STR_SUM íà òîâàðû çàêàçà â ORDERS_DETAIL 
-  --     ñ ó÷åòîì íîâîé ñêèäêè (PKG_ORDERS_DETAIL.UPD_ORD_SUM_BY_DISCOUNT)
-  -- Ëîãèðóåò îòëàäêó è îøèáêè â ERROR_LOG
+  -- Ð¢Ñ€Ð¸Ð³Ð³ÐµÑ€ Ð¾Ð±Ð½Ð¾Ð²Ð»ÑÐµÑ‚ Ð¿Ð¾Ð»Ñ ORDERS
+  -- * Ð˜Ð½Ð¸Ñ†Ð¸Ð°Ð»Ð¸Ð·Ð¸Ñ€ÑƒÐµÑ‚ DATE_DOC, AMOUNT
+  -- * ÐŸÑ€Ð¸ Ð¾Ð±Ð½Ð¾Ð²Ð»ÐµÐ½Ð¸Ð¸ DISCOUNT
+  --   - ÐŸÑ€Ð¾Ð²ÐµÑ€ÑÐµÑ‚ DISCOUNT Ð½Ð° Ð²Ð°Ð»Ð¸Ð´Ð½Ð¾ÑÑ‚ÑŒ (PKG_ORDERS.CHK_DISCOUNT)
+  --   - ÐžÐ±Ð½Ð¾Ð²Ð»ÑÐµÑ‚ Ñ†ÐµÐ½Ñ‹ STR_SUM Ð½Ð° Ñ‚Ð¾Ð²Ð°Ñ€Ñ‹ Ð·Ð°ÐºÐ°Ð·Ð° Ð² ORDERS_DETAIL 
+  --     Ñ ÑƒÑ‡ÐµÑ‚Ð¾Ð¼ Ð½Ð¾Ð²Ð¾Ð¹ ÑÐºÐ¸Ð´ÐºÐ¸ (PKG_ORDERS_DETAIL.UPD_ORD_SUM_BY_DISCOUNT)
+  -- Ð›Ð¾Ð³Ð¸Ñ€ÑƒÐµÑ‚ Ð¾Ñ‚Ð»Ð°Ð´ÐºÑƒ Ð¸ Ð¾ÑˆÐ¸Ð±ÐºÐ¸ Ð² ERROR_LOG
   
 declare
   sOPERATION varchar2(255);
@@ -30,12 +30,12 @@ begin
   elsif UPDATING then
     -- UPDATING
     
-    -- Åñëè ñêèäêà çàêàçà èçìåíèëàñü
+    -- Ð•ÑÐ»Ð¸ ÑÐºÐ¸Ð´ÐºÐ° Ð·Ð°ÐºÐ°Ð·Ð° Ð¸Ð·Ð¼ÐµÐ½Ð¸Ð»Ð°ÑÑŒ
     if coalesce (:old.DISCOUNT, 0) != coalesce(:new.DISCOUNT, 0) then
-      -- Ïðîâåðèì ïðàâèëüíîñòü ñêèäêè
+      -- ÐŸÑ€Ð¾Ð²ÐµÑ€Ð¸Ð¼ Ð¿Ñ€Ð°Ð²Ð¸Ð»ÑŒÐ½Ð¾ÑÑ‚ÑŒ ÑÐºÐ¸Ð´ÐºÐ¸
       PKG_ORDERS.CHK_DISCOUNT(pnORDERS_ID       => :new.ID,
                               pnORDERS_DISCOUNT => coalesce (:new.DISCOUNT, 0));
-      -- Îáíîâèì öåíû òîâàðîâ
+      -- ÐžÐ±Ð½Ð¾Ð²Ð¸Ð¼ Ñ†ÐµÐ½Ñ‹ Ñ‚Ð¾Ð²Ð°Ñ€Ð¾Ð²
       PKG_ORDERS_DETAIL.UPD_ORD_SUM_BY_DISCOUNT(pnORDERS_ID       => :new.ID,
                                                 pnORDERS_DISCOUNT => coalesce (:new.DISCOUNT, 0));
     end if;
