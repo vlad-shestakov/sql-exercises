@@ -66,24 +66,22 @@
 
 
 *Реализованы:*
-- триггеры, выполняющие все требования технического задания
--- дополнительно реализован механизм логирования ошибок и отладки через новую таблицу ERROR_LOG
--- основная бизнес-логика реализована через пакеты PKG_ORDERS, PKG_ORDERS_DETAIL, PKG_LOG
-- Создан тестовый сценарий:
--- Скрипт создания объектов  - [_test CREATE_ALL_OBJECTS.sql](./_test CREATE_ALL_OBJECTS.sql)
--- Тестовый сецнарий         - [_test TEST_PROJECT.sql](./_test TEST_PROJECT.sql)
+* Триггеры, выполняющие все требования технического задания
+  * дополнительно реализован механизм логирования ошибок и отладки через новую таблицу ERROR_LOG
+  * основная бизнес-логика реализована через пакеты PKG_ORDERS, PKG_ORDERS_DETAIL, PKG_LOG
+* Создан тестовый сценарий:
+  * Скрипт создания объектов  - <a href="./_test CREATE_ALL_OBJECTS.sql">_test CREATE_ALL_OBJECTS.sql</a>
+  * Тестовый сецнарий         - <a href="./_test TEST_PROJECT.sql">_test TEST_PROJECT.sql</a>
 
-```
-ДОБАВЛЕНЫ ОБЪЕКТЫ:
-  Таблица [ERROR_LOG.sql](./ERROR_LOG.sql) - Логирование ошибок и отладки
-  Сиквенс [SEQ_ERROR_LOG.sql](./SEQ_ERROR_LOG.sql) 
-  Пакеты
-    [PKG_LOG.sql](./PKG_LOG.sql)            - Работа с таблицей логов ERROR_LOG
-    [PKG_ORDERS.sql](./PKG_ORDERS.sql)         - Пакет бизнес-логики для таблицы заказов ORDERS
-    [PKG_ORDERS_DETAIL.sql](./PKG_ORDERS_DETAIL.sql)  - Пакет бизнес-логики для таблицы товаров в заказах ORDERS_DETAIL
-  Триггеры 
-    [TR_ERROR_LOG_B_I.sql](./TR_ERROR_LOG_B_I.sql)             - Инициализация значений ключа 
-    [TR_ORDERS_B_IU.sql](./TR_ORDERS_B_IU.sql)               - Обработка изменений в таблице Заказы
-    [TR_ORDERS_DETAIL_B_IUD.sql](./TR_ORDERS_DETAIL_B_IUD.sql)       - Обработка изменений в таблице Товары заказов
-    [TR_ORDERS_DETAIL_BA_IU_IDX.sql](./TR_ORDERS_DETAIL_BA_IU_IDX.sql)   - Обработка индексов товаров в таблице Товары заказов
-```
+*ДОБАВЛЕНЫ ОБЪЕКТЫ:*
+* Таблица [ERROR_LOG.sql](./ERROR_LOG.sql) - Логирование ошибок и отладки
+* Сиквенс [SEQ_ERROR_LOG.sql](./SEQ_ERROR_LOG.sql) 
+* Пакеты
+  * [PKG_LOG.sql                   ](./PKG_LOG.sql                   ) - Работа с таблицей логов ERROR_LOG
+  * [PKG_ORDERS.sql                ](./PKG_ORDERS.sql                ) - Пакет бизнес-логики для таблицы заказов ORDERS
+  * [PKG_ORDERS_DETAIL.sql         ](./PKG_ORDERS_DETAIL.sql         ) - Пакет бизнес-логики для таблицы товаров в заказах ORDERS_DETAIL
+* Триггеры                     
+  * [TR_ERROR_LOG_B_I.sql          ](./TR_ERROR_LOG_B_I.sql          ) - Инициализация значений ключа 
+  * [TR_ORDERS_B_IU.sql            ](./TR_ORDERS_B_IU.sql            ) - Обработка изменений в таблице Заказы
+  * [TR_ORDERS_DETAIL_B_IUD.sql    ](./TR_ORDERS_DETAIL_B_IUD.sql    ) - Обработка изменений в таблице Товары заказов
+  * [TR_ORDERS_DETAIL_BA_IU_IDX.sql](./TR_ORDERS_DETAIL_BA_IU_IDX.sql) - Обработка индексов товаров в таблице Товары заказов
